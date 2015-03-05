@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="utf8">
+    <title>js_clock Demo</title>
+    <script type="text/javascript" src="js_clock.js"></script>
+    <script type="text/javascript">
+      function callback_jsClock(currentDate) {
+        console.log(JSON.stringify(currentDate));
+      }
+
+      var options = { debug: true, startDate: new Date(), callback: callback_jsClock };
+      var jsClock = new JsClock(options);
+    </script>
+  </head>
+  <body>
+    <div id="debugClock"></div>
+  </body>
+</html>
