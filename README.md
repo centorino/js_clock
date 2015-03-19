@@ -15,11 +15,8 @@ Add this line to your html file.
 ```
 And add this line, then you can get a date at interval.
 ```
-  function callback_method(currentDate) {
-    console.log(currentDate);
-  }
-  
-  var jsClock = new JsClock({ callback: callback_method });
+  var jsClock = new JsClock('myClock', { autodo: true });
+  // jsClock.start();
 ```
 
 ## Contributing
