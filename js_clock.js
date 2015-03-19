@@ -2,38 +2,36 @@
   var JsClock;
 
   JsClock = function() {
-    function JsClock(options) {
+    function JsClock(clockId, options) {
+      if (options === undefined) options = {};
       this.wday = ['日', '月', '火', '水', '木', '金', '土'];
-      this.now  = options.startDate || new Date();      
-      this.callback = options.callback || undefined;
-
-      this.debug = options.debug || false;
-      
+      this.elem = {wrapper: document.getElementById(clockId), date: null, time: null};
       this.intervalId = null;
-
-      var self = this;
-
+      this.now  = new Date();
+      
       if (options.autodo === undefined || !options.autodo) return;
       
+      var self = this;
       window.onload = function() {
         self.start();
       };
     }
     
     JsClock.prototype.start = function() {
-      var elem = document.getElementById('debugClock');
       var self = this;
       
       self.intervalId = setInterval(function() {
-        self.now.setSeconds(self.now.getSeconds() + 1);
+        self.now = new Date();
+        
+        if (self.elem.wrapper !== undefined) self._render();
 
-        if (self.debug && elem !== undefined) elem.innerHTML = self._debugFormatDate();
-        if (self.callback !== undefined) self.callback(self._getNowJson());
+        self._blink();
       }, 1000);
     };
     JsClock.prototype.stop = function() {
       if (this.intervalId !== null) {
         clearInterval(this.intervalId);
+        this.intervalId = null;
       }
     };
 
@@ -60,10 +58,34 @@
                ampmHours: this._paddingZero(ampmHours.toString(), 2)
              };
     };
-    JsClock.prototype._debugFormatDate = function() {
+    JsClock.prototype._render = function() {
+      this._prepareElements();
+      
       var i = this._getNowJson();
-      return i.year + '/' + i.month + '/' + i.date + '(' + i.wday + ') ' +
-             i.hours + ':' + i.minutes + ':' + i.seconds;
+      var d = i.year + ' / ' + i.month + ' / ' + i.date + ' (' + i.wday + ')';
+      var c = '<span id="colon" style="display: inline-block; width: 1em; text-align: center;">:</span>';
+      var t = i.ampmHours + c + i.minutes + '  ' + i.ampm;
+      
+      this.elem.date.textContent = d;
+      this.elem.time.innerHTML = t;
+      
+      return;
+    };
+    JsClock.prototype._blink = function() {
+      setTimeout(function() {
+        var c = document.getElementById('colon');
+        c.textContent = ' ';
+      }, 500);
+    };
+    JsClock.prototype._prepareElements = function() {
+      if (this.elem.date === null && this.elem.time === null) {
+        this.elem.date = document.createElement('p');
+        this.elem.time = document.createElement('p');
+        this.elem.date.className = 'date';
+        this.elem.time.className = 'time';
+        this.elem.wrapper.appendChild(this.elem.date);
+        this.elem.wrapper.appendChild(this.elem.time);
+      }
     };
 
     return JsClock;
