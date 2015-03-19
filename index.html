@@ -9,8 +9,9 @@
         console.log(JSON.stringify(currentDate));
       }
 
-      var options = { debug: true, startDate: new Date(), callback: callback_jsClock };
-      var jsClock = new JsClock(options);
+      var options = { autodo: true };
+      var jsClock = new JsClock('debugClock', options);
+      // jsClock.start();
     </script>
   </head>
   <body>
