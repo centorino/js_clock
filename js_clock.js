@@ -74,6 +74,7 @@
     JsClock.prototype._blink = function() {
       setTimeout(function() {
         var c = document.getElementById('colon');
+        if (c === undefined || c === null) return;
         c.textContent = ' ';
       }, 500);
     };
